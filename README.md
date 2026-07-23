@@ -1,6 +1,6 @@
 # Draw.io Scientific Illustrator
 
-[中文说明](#中文说明) · [English guide](#english-guide) · [MIT License](LICENSE)
+[中文说明](#中文说明) · [English guide](#english-guide) · [日本語](README.ja.md) · [MIT License](LICENSE)
 
 A Codex plugin that lets an AI agent draw scientific figures **live inside the visible draw.io desktop canvas**. You can watch shapes, labels, arrows, styling, and layout appear step by step. The live workflow calls draw.io's own graph API through a localhost-only MCP server; it does not automate the operating-system mouse or keyboard and does not create XML first and merely open it afterward.
 
