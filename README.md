@@ -1,10 +1,17 @@
 # Draw.io Scientific Illustrator
 
+> [!IMPORTANT]
+> **项目已迁移 / Project migrated**
+>
+> 本项目已停止功能与兼容性更新。后续开发、版本发布和问题修复均已迁移至 [**scientific-illustrator**](https://github.com/icebird1998/scientific-illustrator)。建议所有新老用户安装并使用新项目；本仓库仅作为旧版本和历史资料保留。
+>
+> This repository no longer receives feature or compatibility updates. All future development, releases, and fixes have moved to [**scientific-illustrator**](https://github.com/icebird1998/scientific-illustrator). New and existing users are encouraged to use the new project; this repository is retained only as a legacy archive.
+
 [中文说明](#中文说明) · [English guide](#english-guide) · [MIT License](LICENSE)
 
 A Codex plugin that lets an AI agent draw scientific figures **live inside the visible draw.io desktop canvas**. You can watch shapes, labels, arrows, styling, and layout appear step by step. The live workflow calls draw.io's own graph API through a localhost-only MCP server; it does not automate the operating-system mouse or keyboard and does not create XML first and merely open it afterward.
 
-> Status: Windows is tested. macOS and Linux executable discovery is included, but live behavior can vary with draw.io/Electron packaging. Reports and pull requests are welcome.
+> Legacy status: Windows was the tested platform for this version. For current development and cross-platform support, use [scientific-illustrator](https://github.com/icebird1998/scientific-illustrator).
 
 ## English guide
 
@@ -132,7 +139,7 @@ $env:DRAWIO_PATH = "D:\Apps\draw.io\draw.io.exe"
 
 ### Update
 
-Run the same installer again. It performs a fast-forward `git pull` and reinstalls the plugin. Restart Codex and start a new task afterward.
+This legacy repository no longer receives updates. Install or update [scientific-illustrator](https://github.com/icebird1998/scientific-illustrator) to receive current features, compatibility improvements, and fixes.
 
 ### Troubleshooting
 
@@ -275,7 +282,7 @@ $env:DRAWIO_PATH = "D:\Apps\draw.io\draw.io.exe"
 
 ### 更新
 
-再次运行安装脚本即可。脚本会执行安全的快进更新并重新安装插件。随后重启 Codex、新建任务。
+本旧项目不再更新。若要获取最新功能、兼容性改进和问题修复，请安装或更新 [scientific-illustrator](https://github.com/icebird1998/scientific-illustrator)。
 
 ### 常见问题
 
@@ -298,13 +305,13 @@ $env:DRAWIO_PATH = "D:\Apps\draw.io\draw.io.exe"
 
 - 实时工具目前主要面向可编辑的 draw.io 图元。显微照片、热图和复杂数据图可能需要后续增加专门的实时图片插入工具；
 - 最终还原度取决于参考图分辨率，以及内容是否适合用 draw.io 图元表达；
-- v1.0.0 已在 Windows 上测试，macOS/Linux 暂为尽力支持，欢迎提交测试反馈。
+- v1.0.0 已在 Windows 上测试，macOS/Linux 暂为尽力支持；后续兼容性工作请参见 [scientific-illustrator](https://github.com/icebird1998/scientific-illustrator)。
 
 ## Contributing / 参与贡献
 
-Issues and pull requests are welcome. Please include operating system, draw.io version, Codex version, reproduction steps, and relevant MCP error text. Do not upload confidential reference images.
+This legacy repository no longer accepts feature development or compatibility updates. Please open new issues and pull requests in [scientific-illustrator](https://github.com/icebird1998/scientific-illustrator). Do not upload confidential reference images.
 
-欢迎提交 Issue 和 Pull Request。请注明操作系统、draw.io 版本、Codex 版本、复现步骤及相关 MCP 错误；不要上传保密的参考图片。
+本旧项目不再接受功能开发或兼容性更新。新的 Issue 和 Pull Request 请提交到 [scientific-illustrator](https://github.com/icebird1998/scientific-illustrator)。请勿上传保密的参考图片。
 
 ## License
 
