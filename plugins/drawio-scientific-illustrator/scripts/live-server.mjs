@@ -62,7 +62,7 @@ const tools = [
         port: { type: "integer", minimum: 1024, maximum: 65535, default: 9333 },
         step_delay_ms: { type: "integer", minimum: 0, maximum: 10000, default: 350 },
         maximize: { type: "boolean", default: true },
-        include_screenshot: { type: "boolean", default: true },
+        include_screenshot: { type: "boolean", default: false },
       },
       additionalProperties: false,
     },
@@ -235,6 +235,7 @@ class CdpClient {
     return new Promise((resolve, reject) => {
       const timer = setTimeout(() => {
         this.pending.delete(id);
+        try { this.ws?.close(); } catch {}
         reject(new Error(`CDP method timed out: ${method}`));
       }, 30000);
       this.pending.set(id, {
@@ -367,14 +368,24 @@ async function waitForTarget(port, timeoutMs = 25000) {
 async function connectTarget(target) {
   if (live.cdp?.ws?.readyState === WebSocket.OPEN && live.target?.id === target.id) return;
   try { live.cdp?.ws?.close(); } catch {}
-  live.cdp = new CdpClient(target.webSocketDebuggerUrl);
-  await live.cdp.connect();
-  live.target = target;
-  await live.cdp.call("Runtime.enable");
-  await live.cdp.call("Page.enable");
-  await live.cdp.call("Page.bringToFront").catch(() => {});
-  await sleep(300);
-  await recoverGraphReference().catch(() => false);
+  const cdp = new CdpClient(target.webSocketDebuggerUrl);
+  try {
+    await cdp.connect();
+    live.cdp = cdp;
+    live.target = target;
+    await cdp.call("Runtime.enable");
+    await cdp.call("Page.enable");
+    await cdp.call("Page.bringToFront").catch(() => {});
+    await sleep(300);
+    await recoverGraphReference().catch(() => false);
+  } catch (error) {
+    try { cdp.ws?.close(); } catch {}
+    if (live.cdp === cdp) {
+      live.cdp = null;
+      live.target = null;
+    }
+    throw error;
+  }
 }
 
 async function ensureConnected() {
@@ -632,7 +643,7 @@ async function handleTool(name, args = {}) {
   switch (name) {
     case "drawio_live_launch": {
       const result = await launchLive(args);
-      return { value: result, imageData: args.include_screenshot === false ? undefined : await captureScreenshot() };
+      return { value: result, imageData: args.include_screenshot === true ? await captureScreenshot() : undefined };
     }
     case "drawio_live_status":
       return { value: { connected: true, port: live.port, ...(await liveStatus()) } };
@@ -671,7 +682,7 @@ async function handleTool(name, args = {}) {
         else if (type === "wait") { const ms = Math.max(0, Math.min(10000, operation.ms ?? delay)); await sleep(ms); results.push({ index, type, waited_ms: ms }); }
         else throw new Error(`Unsupported sequence operation at index ${index}: ${type}`);
       }
-      return { value: { operations_applied: results.length, results }, imageData: args.screenshot_after === false ? undefined : await captureScreenshot() };
+      return { value: { operations_applied: results.length, results }, imageData: args.screenshot_after === true ? await captureScreenshot() : undefined };
     }
     case "drawio_live_inspect": {
       const maxCells = args.max_cells || 500;
@@ -707,7 +718,9 @@ async function handleTool(name, args = {}) {
       `);
       const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<mxfile host="Electron" modified="${new Date().toISOString()}" version="30.3.6">\n  <diagram id="live-page" name="${xmlEscape(args.page_name || "Live drawing")}">\n${modelXml}\n  </diagram>\n</mxfile>\n`;
       await fs.mkdir(path.dirname(output), { recursive: true });
-      await fs.writeFile(output, xml, "utf8");
+      const temporary = `${output}.tmp-${process.pid}`;
+      await fs.writeFile(temporary, xml, "utf8");
+      await fs.rename(temporary, output);
       return { value: { output_path: output, bytes: Buffer.byteLength(xml), saved_from_visible_session: true } };
     }
     default:
@@ -741,7 +754,9 @@ async function handleMessage(message) {
 }
 
 const rl = createInterface({ input: process.stdin, crlfDelay: Infinity });
-rl.on("line", async (line) => {
+let requestQueue = Promise.resolve();
+
+async function handleLine(line) {
   if (!line.trim()) return;
   let message;
   try { message = JSON.parse(line); }
@@ -755,6 +770,10 @@ rl.on("line", async (line) => {
   } catch (error) {
     process.stdout.write(`${JSON.stringify(rpcError(message.id, -32603, "Internal error", error.message))}\n`);
   }
+}
+
+rl.on("line", (line) => {
+  requestQueue = requestQueue.then(() => handleLine(line));
 });
 
 process.on("uncaughtException", (error) => process.stderr.write(`[${SERVER_NAME}] ${error.stack || error.message}\n`));
