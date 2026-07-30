@@ -3,15 +3,17 @@
 > [!IMPORTANT]
 > **项目已迁移 / Project migrated**
 >
-> 本项目已停止功能与兼容性更新。后续开发、版本发布和问题修复均已迁移至 [**scientific-illustrator**](https://github.com/icebird1998/scientific-illustrator)。建议所有新老用户安装并使用新项目；本仓库仅作为旧版本和历史资料保留。
+> 本仓库目前继续保持公开访问，暂不归档或删除，但已停止功能与兼容性更新。后续开发、版本发布和问题修复均已迁移至 [**scientific-illustrator**](https://github.com/icebird1998/scientific-illustrator)。建议所有新老用户下载并使用新项目。
 >
-> This repository no longer receives feature or compatibility updates. All future development, releases, and fixes have moved to [**scientific-illustrator**](https://github.com/icebird1998/scientific-illustrator). New and existing users are encouraged to use the new project; this repository is retained only as a legacy archive.
+> **推荐下载新项目 / Download the new project:** [项目主页 / Project home](https://github.com/icebird1998/scientific-illustrator) · [最新版本下载 / Latest release](https://github.com/icebird1998/scientific-illustrator/releases/latest)
+>
+> This repository remains publicly accessible and is not being archived or deleted at this time, but it no longer receives feature or compatibility updates. All future development, releases, and fixes have moved to [**scientific-illustrator**](https://github.com/icebird1998/scientific-illustrator). New and existing users are encouraged to download and use the new project.
 
 [中文说明](#中文说明) · [English guide](#english-guide) · [MIT License](LICENSE)
 
 A Codex plugin that lets an AI agent draw scientific figures **live inside the visible draw.io desktop canvas**. You can watch shapes, labels, arrows, styling, and layout appear step by step. The live workflow calls draw.io's own graph API through a localhost-only MCP server; it does not automate the operating-system mouse or keyboard and does not create XML first and merely open it afterward.
 
-> Legacy status: Windows was the tested platform for this version. For current development and cross-platform support, use [scientific-illustrator](https://github.com/icebird1998/scientific-illustrator).
+> Legacy status: this repository remains online for existing users but is no longer updated. Windows was the tested platform for this version. For current development and cross-platform support, use [scientific-illustrator](https://github.com/icebird1998/scientific-illustrator).
 
 ## English guide
 
